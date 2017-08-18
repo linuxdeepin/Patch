@@ -1,0 +1,15 @@
+--- eog-3.18.1.orig/src/eog-window.c
++++ eog-3.18.1/src/eog-window.c
+@@ -2591,6 +2591,12 @@ wallpaper_info_bar_response (GtkInfoBar
+ 								       "System Settings",
+ 								       G_APP_INFO_CREATE_NONE,
+ 								       &error);
++		
++		if (g_strcmp0 (g_getenv ("XDG_SESSION_DESKTOP"), "deepin") == 0)
++			app_info = g_app_info_create_from_commandline ("dde-control-center personalization",
++								       "Deepin System Settings",
++								       G_APP_INFO_CREATE_NONE,
++								       &error);
+ 		else
+ 			app_info = g_app_info_create_from_commandline ("gnome-control-center background",
+ 								       "System Settings",

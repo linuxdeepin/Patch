@@ -1,0 +1,13 @@
+Source: fake-node
+Section: admin
+Priority: optional
+Maintainer: lilongyu <lilongyu@linuxdeepin.com>
+Standards-Version: 3.9.4
+Build-Depends: debhelper (>= 8.1.3~)
+
+Package: fake-node
+Architecture: all
+Depends: ${misc:Depends}, nodejs
+Conflicts: node
+Description: fake node symbol link to nodejs
+  This package config the system to symbol link nodejs

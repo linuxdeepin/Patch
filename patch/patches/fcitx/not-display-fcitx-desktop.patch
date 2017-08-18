@@ -1,0 +1,7 @@
+--- fcitx-4.2.9.orig/data/fcitx.desktop.in
++++ fcitx-4.2.9/data/fcitx.desktop.in
+@@ -12,3 +12,4 @@ X-GNOME-AutoRestart=false
+ X-GNOME-Autostart-Notify=false
+ X-KDE-autostart-after=panel
+ X-KDE-StartupNotify=false
++NoDisplay=true

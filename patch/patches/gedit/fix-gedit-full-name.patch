@@ -1,0 +1,22 @@
+--- gedit-3.18.1.orig/data/org.gnome.gedit.desktop.in
++++ gedit-3.18.1/data/org.gnome.gedit.desktop.in
+@@ -10,7 +10,7 @@ MimeType=text/plain;
+ Icon=accessories-text-editor
+ Categories=GNOME;GTK;Utility;TextEditor;
+ X-GNOME-DocPath=gedit/gedit.xml
+-_X-GNOME-FullName=gedit Text Editor
++_X-GNOME-FullName=Text Editor
+ X-GNOME-Bugzilla-Bugzilla=GNOME
+ X-GNOME-Bugzilla-Product=gedit
+ X-GNOME-Bugzilla-Component=general
+--- gedit-3.18.1.orig/data/org.gnome.gedit.desktop.in.in
++++ gedit-3.18.1/data/org.gnome.gedit.desktop.in.in
+@@ -10,7 +10,7 @@ MimeType=text/plain;
+ Icon=accessories-text-editor
+ Categories=GNOME;GTK;Utility;TextEditor;
+ X-GNOME-DocPath=gedit/gedit.xml
+-_X-GNOME-FullName=gedit Text Editor
++_X-GNOME-FullName=Text Editor
+ X-GNOME-Bugzilla-Bugzilla=GNOME
+ X-GNOME-Bugzilla-Product=gedit
+ X-GNOME-Bugzilla-Component=general

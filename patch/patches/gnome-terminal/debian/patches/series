@@ -1,0 +1,10 @@
+nautilus-x11.patch
+10_kfreebsd-f_dupfd_cloexec.patch
+Don-t-allow-the-theme-to-set-black-on-black.patch
+Provide-fallback-for-reading-current-directory-if-OS.patch
+0001-build-Don-t-treat-warnings-as-errors.patch
+gnome-terminal-symbolic-new-tab-icon.patch
+0001-notebook-Don-t-change-show-tabs-when-going-to-empty-.patch
+0001-window-Exit-early-from-screen-removed-handler-for-no.patch
+0001-window-Pass-tab-switching-keys-to-the-terminal-for-t.patch
+gnome-terminal-restore-dark-transparency.patch

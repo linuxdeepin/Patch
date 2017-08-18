@@ -1,0 +1,81 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ reprepro (4.17.1-1) unstable; urgency=medium
+ .
+   * new bugfix release
+   - fix bug in 'flood' command and output of 'warning' in FilterList
+   - fix some spelling mistakes
+Author: Bernhard R. Link <brlink@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: 2017-03-15
+
+--- reprepro-4.17.1.orig/distribution.c
++++ reprepro-4.17.1/distribution.c
+@@ -54,7 +54,7 @@ static retvalue distribution_free(struct
+ 		free(distribution->butautomaticupgrades);
+ 		free(distribution->label);
+ 		free(distribution->description);
+-        free(distribution->acquire-by-hash);
++        free(distribution->acquirebyhash);
+ 		free(distribution->deb_override);
+ 		free(distribution->udeb_override);
+ 		free(distribution->dsc_override);
+@@ -398,7 +398,7 @@ CFallSETPROC(distribution, butautomaticu
+ CFtruthSETPROC2(distribution, readonly, readonly)
+ CFallSETPROC(distribution, label)
+ CFallSETPROC(distribution, description)
+-CFallSETPROC(distribution, acquire-by-hash)
++CFallSETPROC(distribution, acquirebyhash)
+ CFsignwithSETPROC(distribution, signwith)
+ CFfileSETPROC(distribution, deb_override)
+ CFfileSETPROC(distribution, udeb_override)
+@@ -465,7 +465,7 @@ static const struct configfield distribu
+ 	CF("DebIndices",	distribution,	deb),
+ 	CF("DebOverride",	distribution,	deb_override),
+ 	CF("Description",	distribution,	description),
+-    CF("Acquire-By-Hash",   distribution,   acquire-by-hash),
++    CF("Acquire-By-Hash",   distribution,   acquirebyhash),
+ 	CF("DscIndices",	distribution,	dsc),
+ 	CF("DscOverride",	distribution,	dsc_override),
+ 	CF("FakeComponentPrefix", distribution,	fakecomponentprefix),
+--- reprepro-4.17.1.orig/distribution.h
++++ reprepro-4.17.1/distribution.h
+@@ -42,7 +42,7 @@ struct distribution {
+ 	 * generated, may be NULL. only suite is sometimes used
+ 	 * (and only for sanity checks) */
+ 	/*@null@*/char *suite, *version;
+-	/*@null@*/char *origin, *label, *description, *acquire-by-hash, 
++	/*@null@*/char *origin, *label, *description, *acquirebyhash, 
+ 		*notautomatic, *butautomaticupgrades;
+ 	/* What architectures and components are there */
+ 	struct atomlist architectures, components;
+--- reprepro-4.17.1.orig/release.c
++++ reprepro-4.17.1/release.c
+@@ -1674,9 +1674,9 @@ retvalue release_prepare(struct release
+ 		writestring("\nDescription: ");
+ 		writestring(distribution->description);
+ 	}
+-    if (distribution->acquire-by-hash != NULL) {
++    if (distribution->acquirebyhash != NULL) {
+         writestring("\nAcquire-By-Hash: ");
+-        writestring(distribution->acquire-by-hash);
++        writestring(distribution->acquirebyhash);
+     }
+ 	if (distribution->notautomatic != NULL) {
+ 		writestring("\nNotAutomatic: ");

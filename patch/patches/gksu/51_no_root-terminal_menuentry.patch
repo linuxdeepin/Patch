@@ -1,0 +1,12 @@
+Description: Don't display root-terminal menu entry.
+From: Artur Rona <ari-tczew@ubuntu.com>
+Last-Update: 2014-12-25
+
+diff -pruN -x '*~' gksu-2.0.2.orig/gksu.desktop.in gksu-2.0.2/gksu.desktop.in
+--- gksu-2.0.2.orig/gksu.desktop.in	2014-12-25 01:56:32.345074383 +0100
++++ gksu-2.0.2/gksu.desktop.in	2014-12-25 01:52:18.487815565 +0100
+@@ -8,3 +8,4 @@ Terminal=false
+ X-MultipleArgs=false
+ Type=Application
+ Categories=GTK;System;TerminalEmulator;
++NoDisplay=true

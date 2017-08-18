@@ -1,0 +1,16 @@
+--- gvfs-1.30.4.orig/monitor/afc/afcvolumemonitor.c
++++ gvfs-1.30.4/monitor/afc/afcvolumemonitor.c
+@@ -29,6 +29,13 @@ g_vfs_afc_monitor_create_volume (GVfsAfc
+ 
+   g_print ("creating volume for device uuid '%s'\n", uuid);
+ 
++  volume = g_vfs_afc_volume_new (G_VOLUME_MONITOR (self), uuid, NULL);
++  if (volume != NULL)
++    {
++      self->volumes = g_list_prepend (self->volumes, volume);
++      g_signal_emit_by_name (self, "volume-added", volume);
++    }
++
+   /* Only add the house arrest volume, the default AFC service
+    * doesn't contain anything that users should modify */
+   volume = g_vfs_afc_volume_new (G_VOLUME_MONITOR (self), uuid, HOUSE_ARREST_SERVICE_PORT);

@@ -1,0 +1,10 @@
+#!/bin/sh
+# postinst script 
+# see: dh_installdeb(1)
+
+set -e 
+
+if [ "$1" = "configure" ];then
+	update-alternatives --install /usr/bin/node node /usr/bin/nodejs 200 \
+		--slave /usr/share/man/man1/node.1.gz node.1.gz /usr/share/man/man1/nodejs.1.gz
+fi

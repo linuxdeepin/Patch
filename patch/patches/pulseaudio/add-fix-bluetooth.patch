@@ -1,0 +1,38 @@
+--- pulseaudio-7.1.orig/src/modules/bluetooth/bluez4-util.c
++++ pulseaudio-7.1/src/modules/bluetooth/bluez4-util.c
+@@ -1864,14 +1864,14 @@ char *pa_bluez4_cleanup_name(const char
+ 
+     pa_assert(name);
+ 
+-    while ((*name >= 1 && *name <= 32) || *name >= 127)
++    while ((*name >= 1 && *name <= 32))
+         name++;
+ 
+     t = pa_xstrdup(name);
+ 
+     for (s = d = t; *s; s++) {
+ 
+-        if (*s <= 32 || *s >= 127 || *s == '_') {
++        if ((*s <= 32 && *s >= 0) || *s == '_') {
+             space = true;
+             continue;
+         }
+--- pulseaudio-7.1.orig/src/modules/bluetooth/module-bluez5-device.c
++++ pulseaudio-7.1/src/modules/bluetooth/module-bluez5-device.c
+@@ -1608,14 +1608,14 @@ static char *cleanup_name(const char *na
+ 
+     pa_assert(name);
+ 
+-    while ((*name >= 1 && *name <= 32) || *name >= 127)
++    while ((*name >= 1 && *name <= 32))
+         name++;
+ 
+     t = pa_xstrdup(name);
+ 
+     for (s = d = t; *s; s++) {
+ 
+-        if (*s <= 32 || *s >= 127 || *s == '_') {
++        if ((*s <= 32 && *s >= 0) || *s == '_') {
+             space = true;
+             continue;
+         }

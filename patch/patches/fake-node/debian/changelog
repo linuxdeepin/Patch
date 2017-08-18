@@ -1,0 +1,11 @@
+fake-node (0.0.4) unstable; urgency=medium
+
+  * add node conflicts.
+
+ -- Deepin Packages Builder <packages@linuxdeepin.com>  Fri, 02 Oct 2015 00:18:24 +0800
+
+fake-node (0.0.3) unstable; urgency=medium
+
+  * initial release.
+
+ -- Deepin Packages Builder <packages@linuxdeepin.com>  Mon, 18 May 2015 12:48:21 +0800

@@ -1,0 +1,11 @@
+--- udisks2-2.1.6.orig/data/org.freedesktop.udisks2.policy.in
++++ udisks2-2.1.6/data/org.freedesktop.udisks2.policy.in
+@@ -29,7 +29,7 @@
+     <defaults>
+       <allow_any>auth_admin</allow_any>
+       <allow_inactive>auth_admin</allow_inactive>
+-      <allow_active>auth_admin_keep</allow_active>
++      <allow_active>yes</allow_active>
+     </defaults>
+   </action>
+ 

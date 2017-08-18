@@ -1,0 +1,24 @@
+--- xdg-utils-1.1.1.orig/scripts/xdg-open.in
++++ xdg-utils-1.1.1/scripts/xdg-open.in
+@@ -460,7 +460,7 @@ case "$DE" in
+     open_kde "$url"
+     ;;
+ 
+-    gnome3|cinnamon)
++    gnome3|cinnamon|dde)
+     open_gnome3 "$url"
+     ;;
+ 
+--- xdg-utils-1.1.1.orig/scripts/xdg-utils-common.in
++++ xdg-utils-1.1.1/scripts/xdg-utils-common.in
+@@ -267,6 +267,10 @@ detectDE()
+          GNOME*)
+            DE=gnome;
+            ;;
++         # patch for deepin session support
++         DEEPIN)
++           DE=dde;
++           ;;
+          KDE)
+            DE=kde;
+            ;;

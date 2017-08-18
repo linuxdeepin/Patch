@@ -1,0 +1,16 @@
+#packages patched, versions should be  **-deepin.
+steam
+vim
+libreoffice
+dkms
+linux-latest
+fglrx-driver
+firmware-nonfree
+nvidia-graphics-drivers
+nvidia-graphics-drivers-legacy-340xx
+pepperflashplugin-nonfree
+-- apt
+Need update!
+
+-- lightdm
+Patched debian directory

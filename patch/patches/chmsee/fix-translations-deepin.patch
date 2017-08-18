@@ -1,0 +1,22 @@
+--- chmsee-1.3.0.orig/po/zh_CN.po
++++ chmsee-1.3.0/po/zh_CN.po
+@@ -33,7 +33,7 @@ msgstr ""
+ 
+ #: ../data/chmsee.desktop.in.h:1
+ msgid "ChmSee"
+-msgstr "ChmSee"
++msgstr "Chm阅读器"
+ 
+ #: ../data/chmsee.desktop.in.h:2
+ msgid "HTML Help(CHM) viewer"
+--- chmsee-1.3.0.orig/po/zh_TW.po
++++ chmsee-1.3.0/po/zh_TW.po
+@@ -32,7 +32,7 @@ msgstr ""
+ 
+ #: ../data/chmsee.desktop.in.h:1
+ msgid "ChmSee"
+-msgstr "檢視 CHM"
++msgstr "檢視CHM"
+ 
+ #: ../data/chmsee.desktop.in.h:2
+ msgid "HTML Help(CHM) viewer"

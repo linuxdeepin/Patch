@@ -1,0 +1,16 @@
+Description: Change from sudo(1) to sudo(8)
+Author: Jackson Doak <noskcaj@ubuntu.com>
+Bug-Debian: http://bugs.debian.org/715285
+
+--- gksu-2.0.2.orig/man/gksu.1
++++ gksu-2.0.2/man/gksu.1
+@@ -97,7 +97,7 @@ Force gksu to use su(1) as its backend f
+ .HP
+ \fB\-\-sudo\-mode\fR, \fB\-S\fR
+ .IP
+-Force gksu to use sudo(1) as its backend for running the programs.
++Force gksu to use sudo(8) as its backend for running the programs.
+ .SH "SEE ALSO"
+ .BR su (1),
+-.BR sudo (1)
++.BR sudo (8)
