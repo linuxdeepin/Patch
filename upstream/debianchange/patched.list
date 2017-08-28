@@ -1,0 +1,49 @@
+apt     //patch项目
+cogl    //patch项目
+chmsee   //patch项目
+debhelper //和debian无差异，当初patch 解决dbgsym问题，现在已经不需要
+eog     //patch项目
+fcitx   //patch项目
+file-roller  //patch项目
+firmware-nonfree   //patch项目
+fontconfig   //patch项目
+freetype   //patch项目
+gedit   //patch项目
+gksu    //patch项目
+glx-alternatives  //patch项目
+gnome-do
+gnome-keyring
+gnome-todo
+gnome-system-monitor  //patch项目
+gnome-terminal    //patch项目
+grub2        //patch项目
+gvfs      //patch项目
+imagemagick  //patch项目
+im-config    //patch项目
+steam    //patch项目
+libgksu   //patch项目
+libreoffice   //patch项目
+lightdm     //patch项目
+netselect   //patch项目
+nvidia-graphics-drivers  //patch项目 
+p7zip    //patch项目
+policykit-1   //patch项目
+policykit-1-gnome   //patch项目
+pulseaudio   //patch项目
+pygtk    //patch项目
+reprepro   //patch项目
+vim     //patch项目
+clutter-1.0  //patch项目
+libqapt   //patch项目
+bcmwl    
+fglrx-driver   //移除
+systemd   //patch项目
+udisks2   //patch项目
+vte    //patch项目
+xdg-utils     //xdg-utils项目
+glib2.0   //gerrit fork代码
+alien-arena //添加desktop
+blender  //使用官网替换
+gdebi //打了patch
+simplescreenrecorder //自己替换
+texstudio //自己替换了

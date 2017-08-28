@@ -1,0 +1,18 @@
+dde目录 为deepin自己维护软件
+
+debianchange目录  包括debian冻结版本软件（但是上游也有此软件）,patch软件，以及用第三方软件替代(源码名相同)，此列表表示不能直接使用
+上游debian更新源里面代码及软件包。
+
+third目录 为第三方软件,包括从其他发型版拿来，通过各种软件官网，github,及其他渠道收集打包软件。
+同时第三方软件目录又分两类，区别与是否在商店上架。thirdall.list为总list.
+
+例如：thunderbird 因为使用了ubuntu版本，但是上游也有此软件，分属于不同源码包，归类到thirdall.list
+例如：deepin-cogl为deepin自己fork代码，与上游cogl源码有冲突，归类到debianchange.list
+例如：imagemagick 为上游软件，我们自己patch后，归类到debianchange.list
+列如: 依赖qt相关软件，如果不能升级需要冻结，归类到debianchange.list
+例如：dde-daemon 为deepin自己维护代码，归类到dde.list
+例如：gstreamer0.10 及相关软件为上游移除，且我们在继续维护软件，归类到thirdall.list
+例如：libjpeg8 为上游移除软件，且我们需要持续维护，归类到thirdall.list
+例如：依赖deepin-wine相关软件，归类到thirdall.list
+
+另注：deepin-wine 以及无源码项目不在此次收集范围。
