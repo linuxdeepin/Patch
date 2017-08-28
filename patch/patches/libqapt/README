@@ -1,0 +1,4 @@
+Package: libqapt3-runtime
+Architecture: any
+Depends: dde-polkit-agent | polkit-kde-agent-1 | policykit-1-gnome
+修改依赖关系

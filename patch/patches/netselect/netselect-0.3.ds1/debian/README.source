@@ -1,0 +1,13 @@
+
+Netselect's sources in Debian have been somewhat modified from upstream's.
+
+Upstream's repository is accesible in https://github.com/apenwarr/netselect
+
+Debian repository for the the code used in netselect packages is
+available in SVN at
+svn://svn.debian.org/svn/collab-maint/deb-maint/netselect/trunk
+
+----
+Javier Fernandez-Sanguino <jfs@debian.org>
+Wed, 01 Dec 2010 00:00:09 +0100
+

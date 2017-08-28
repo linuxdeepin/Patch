@@ -1,0 +1,357 @@
+#!/bin/bash
+#
+# A script to create an apt sources.list file automatically by downloading
+# the list of Debian mirrors and choosing the fastest main and non-us server
+# using netselect.
+#
+# Author: Avery Pennarun <apenwarr@debian.org>
+# Enhancements: Manuel Estrada Sainz <ranty@debian.org>
+#
+# License: public domain.  Please feel free to improve this script.  It
+# doesn't really belong in the netselect package, particularly since the
+# netselect package doesn't depend on wget and this script does.  If you
+# feel like merging this into another package, or creating a new package,
+# please do.  Then tell me, so I can remove it from the netselect package.
+#
+# TO DO:
+#   - parse command line options for output file, input files, etc.
+#   - have some way to pass options (especially -t) to netselect.
+#   - test the generated files automatically.  Some mirrors in the list
+#       are broken.  We should at least verify that the Packages and Sources
+#       files exist and aren't ancient.
+#   - maybe generate redundant entries, in case one server is missing files?
+#
+#
+
+# Modified by Manuel Estrada Sainz <ranty@debian.org>:
+# March 2nd, 2002
+#  - put in place the code to parse options and added some
+#  - allow the user to select the protocol, including rsync
+#  - To pass options to netselect just put them after '--'
+# 	e.g.: netselect-debian -p http -t testing -- -t 50
+#  - mirror validity checking including date of Packages.gz.
+#  - check '-n' mirrors but use only as much as '-m' in sources.list
+
+URL="http://www.debian.org/mirror/mirrors_full"
+N_CHECK=3
+MAX_MIRRORS=1
+PROTO=http
+CHECK=false
+MAX_PACKAGES_AGE=5 #in days
+TYPE=""
+ARCH=$(dpkg --print-installation-architecture)
+
+TEMP=`getopt -o cd:n:t:p:a:m: --long \
+	check,distro:,n-check:,type:,proto:,max-age,max-mirrors \
+	-n "$0" -- "$@"`
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+eval set -- "$TEMP"
+while true ; do
+	case "$1" in
+		-c|--check)
+			echo "Will check mirrors" 
+			CHECK=true
+			shift
+			;;
+		-d|--distro)
+			DISTRO="$2"
+			echo "Distro: \`$2'"
+			shift 2
+			;;
+		-n|--n-check)
+			N_CHECK="$2"
+			echo "N_CHECK: \`$2'"
+			shift 2
+			;;
+		-m|--max-mirrors)
+			MAX_MIRRORS="$2"
+			echo "MAX_MIRRORS \`$2'"
+			shift 2
+			;;
+		-p|--proto)
+			PROTO="$2"
+			echo "PROTO: \`$2'"
+			shift 2
+			;;
+		-t|--type)
+			TYPE="$2"
+			echo "TYPE: \`$2'"
+			shift 2
+			;;
+		-a|--max-age)
+			MAX_PACKAGES_AGE="$2"
+			echo "MAX_PACKAGES_AGE: \`$2'"
+			shift 2
+			;;
+		--)
+			shift 
+			break
+			;;
+		*)
+			echo "Internal error!" 
+			exit 1
+			;;
+	esac
+done
+
+NETSELECT_ARGS="$@"
+
+#Convert MAX_PACKAGES_AGE to seconds
+MAX_PACKAGES_AGE=$(expr $MAX_PACKAGES_AGE '*' 24 '*' 60 '*' 60 )
+
+# WARNING: %s format to 'date' is a GNU extension
+OLDEST_VALID_DATE=$(expr $(date +%s) - $MAX_PACKAGES_AGE )
+
+log()
+{
+	echo "$@" >&2
+}
+
+#This may be usefull to checkout if some mirrors provide more protocols
+#than reported on mirrors_full.
+check_other_protocol()
+{
+	local PROTO="$1"
+	local MIRRORS=$2
+	for MIRROR in $MIRRORS
+	do
+		HOST=$(echo $MIRROR|sed -e's|[^:]*://\([^/]*\)/.*|\1|')
+		log "cheking $HOST for $PROTO"
+		case $PROTO in
+		rsync)
+			if rsync --password-file $TEMP_DIR/rsync-password-file \
+				-q rsync://$HOST/ 2>/dev/null >&2
+			then
+				echo $MIRROR
+			fi
+			;;
+		ftp)
+			if MODIFIED="$(wget ftp://$HOST/ --spider -S 1>&1 |
+					sed -n -e's/.*Last-Modified://p')"
+			then
+				MODIFIED=$(date -d "$MODIFIED" +%s)
+				TODAY=$(date +%s)
+				MAX_AGE=$(expr $MAX_PACKAGES_DAYS '*' 24 '*' 60)
+
+				echo $MIRROR
+			fi
+			;;
+		http)
+			if wget http://$HOST/ --spider -o /dev/null
+			then
+				echo $MIRROR
+			fi
+			;;
+		esac
+	done
+}
+
+#Looks for 'good' mirrors in a list.
+#For now it only checks for Packages list availability.
+check_mirrors()
+{
+	local MIRRORS="$1"
+	local SECTION="$2"
+	local PROTO
+	local MODIFIED
+	local MODIFIED_SEC
+
+	if ! $CHECK
+	then
+		echo "$MIRRORS"
+		return
+	fi
+	for MIRROR in $MIRRORS
+	do
+		PROTO=$(expr "$MIRROR" : '\([^:]*\)://')
+		HOST=$(echo $MIRROR|sed -e's|[^:]*://\([^/]*\)/.*|\1|')
+		log -n "checking  $MIRROR" >&2
+		PACKAGES="$MIRROR/dists/$DISTRO/$SECTION/binary-$ARCH/Packages.gz"
+		MODIFIED=""
+		MODIFIED_SEC=""
+		
+		case $PROTO in
+		rsync)
+			local BASENAME=$(basename $PACKAGES)
+			MODIFIED=$(rsync --password-file \
+					$TEMP_DIR/rsync-password-file \
+					$PACKAGES 2> /dev/null \
+					| sed -n -e "/$BASENAME/s/ \+/ /gp" \
+					| cut -d" " -f3-4)
+			;;
+		http)
+			MODIFIED=$(wget $PACKAGES --spider -S 2>&1 |
+					sed -n -e's/.*Last-Modified://p')
+			;;
+		ftp)
+			#should depend on shellutils for dirname and basename
+			local DIRNAME=$(dirname $PACKAGES)/
+			local BASENAME=$(basename $PACKAGES)
+			MODIFIED=$(wget --proxy=off "$DIRNAME" --spider -S \
+				-O/dev/null -t3 2>&1 \
+				| sed -n -e "/$BASENAME/s/ \+/ /gp" \
+				| cut -d" " -f6-8 )
+			;;
+		esac
+
+		if [ $? -eq 0 ] && [ -n "$MODIFIED" ]
+		then
+			MODIFIED_SEC=$(date -d"$MODIFIED" +%s)
+			MODIFIED=$(date -d"$MODIFIED" "+%x %X")
+		fi
+
+		if [ $? -eq 0 ] && [ -n "$MODIFIED_SEC" ] \
+			&& [ "$MODIFIED_SEC" -ge "$OLDEST_VALID_DATE" ]
+		then
+			echo $MIRROR
+			log " OK ($MODIFIED)"
+		else
+			log " FAILED ($MODIFIED)"
+		fi
+	done
+}
+
+#Get's a list of mirrors for a given type and protocol
+search_list()
+{
+	local PROTO="$1" TYPE="$2"
+	local SEARCH SEPARATOR HEADER
+	case $PROTO in
+	rsync)	SEARCH="$TYPE over rsync:"
+		SEPARATOR="/"
+		HEADER="rsync://"
+	;;
+	ftp)	SEARCH="$TYPE over FTP:"
+		SEPARATOR=""
+		HEADER="ftp://"
+	;;
+	http)	SEARCH="$TYPE over HTTP:"
+		SEPARATOR=""
+		HEADER="http://"
+	;;
+	esac
+
+	sed -n -f- mirrors_full <<-EOF
+		/^Site:/{
+			s|^Site: *||
+			#Remove other aliasses if any
+			s|[, ].*$||
+			h
+		}
+		/^$SEARCH/{
+			#Delete html tags if any
+			s|<[^<>]*>||g
+			#get directory name
+			s|^$SEARCH[ 	]*||
+			#Append host name
+			G
+			#Swap and add separator if needed
+			s|\(.*\)\n\(.*\)|$HEADER\2$SEPARATOR\1|
+			#print
+			p
+		}
+EOF
+
+}
+
+run_netselect()
+{
+	local SEARCH="$1" N_CHECK="$2" PROTO="$3"
+
+	netselect -v -s $N_CHECK $NETSELECT_ARGS \
+		$(search_list $PROTO "$SEARCH") \
+		| awk '{print $2}'
+}
+
+if [ -z "$DISTRO" ]; then
+	log "You didn't provide a distribution name (usually 'stable', "
+	log "'testing', or 'unstable') on the command line.  We'll use "
+	log "'stable' by default."
+	log
+	DISTRO=stable
+fi
+
+if [ ! -f mirrors_full -a ! -e /usr/bin/wget ]; then
+	log "Sorry, this script requires the 'wget' package in order to run."
+	log "You can also download the mirrors list yourself and leave it"
+	log "in the current directory:"
+	log "        $URL"
+	exit 1
+fi
+
+if [ ! -f mirrors_full ]; then
+	log "Retrieving the list of mirrors from www.debian.org..."
+	log
+
+	if ! wget "$URL"; then
+		log "$0: wget failed.  Please try to correct the problem"
+		log "by reading the wget messages printed above."
+		exit 2
+	fi
+else
+	log "There is a already a mirrors_full file in the current"
+	log "directory.  I'll use that, rather than downloading it again."
+	log
+fi
+
+TEMP_DIR=$(mktemp -u netselect-debian.XXXXXX)
+if ! mkdir --mode=700 $TEMP_DIR
+then
+	log "Error creating temp directory"
+fi
+trap 'rm -rf $TEMP_DIR; exit 0' EXIT SIGHUP SIGINT
+
+#make a password file for rsync
+#some rsync server require password, and we don't want to prompt the user for
+#one.
+echo > $TEMP_DIR/rsync-password-file
+chmod 600 $TEMP_DIR/rsync-password-file
+
+#check_mirrors "
+#rsync://ftp.belnet.be/debian-non-US/
+#rsync://ftp.fdn.fr/pub/linux/debian-non-US/
+#rsync://debian.teleglobe.net/debian/non-US/"
+#exit 0
+
+log "Choosing a main Debian mirror using netselect."
+MAIN_MIRRORS=$(run_netselect "Packages" $N_CHECK $PROTO)
+MAIN_MIRRORS=$(check_mirrors "$MAIN_MIRRORS" "main")
+MAIN_MIRRORS=$(echo "$MAIN_MIRRORS" | head -n$MAX_MIRRORS)
+log "The fastest servers seems to be:"
+log
+log "$MAIN_MIRRORS"
+log
+
+log "Choosing a non-US Debian mirror using netselect."
+NON_US_MIRRORS=$(run_netselect "Non-US packages" $N_CHECK $PROTO)
+NON_US_MIRRORS=$(check_mirrors "$NON_US_MIRRORS" "non-US/main")
+NON_US_MIRRORS=$(echo "$NON_US_MIRRORS" | head -n$MAX_MIRRORS)
+log "The fastest non-US servers seems to be:"
+log
+log "$NON_US_MIRRORS"
+log
+
+log "Writing the sources.list in the current directory."
+
+rm -f sources.list
+
+(
+	echo "# the main Debian packages.  Uncomment the deb-src line if you"
+	echo "# want 'apt-get source' to work with most packages."
+	for MAIN in $MAIN_MIRRORS
+	do
+		echo "deb $MAIN $DISTRO main contrib non-free"
+		echo "# deb-src $MAIN $DISTRO main contrib non-free"
+	done
+	
+	echo
+	echo "# the non-US Debian packages.  Uncomment the deb-src line if you"
+	echo "# want 'apt-get source' to work with non-US packages."
+	for NON_US in $NON_US_MIRRORS
+	do
+		echo "deb $NON_US $DISTRO/non-US main contrib non-free"
+		echo "# deb-src $NON_US $DISTRO/non-US main contrib non-free"
+	done
+) >sources.list
+
+echo "Done."

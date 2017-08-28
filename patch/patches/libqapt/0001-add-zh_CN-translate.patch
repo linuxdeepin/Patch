@@ -1,0 +1,26 @@
+From 492f04cc5d7ce3ee704a430af000cb599358921a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=E7=9F=B3=E5=8D=9A=E6=96=87?= <sbw@sbw.so>
+Date: Tue, 1 Aug 2017 13:08:18 +0800
+Subject: [PATCH] add `zh_CN` translate
+
+---
+ src/worker/org.kubuntu.qaptworker.policy.cmake | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/worker/org.kubuntu.qaptworker.policy.cmake b/src/worker/org.kubuntu.qaptworker.policy.cmake
+index f6a4e66..81f2db3 100644
+--- a/src/worker/org.kubuntu.qaptworker.policy.cmake
++++ b/src/worker/org.kubuntu.qaptworker.policy.cmake
+@@ -16,7 +16,9 @@
+   </action>
+   <action id="@QAPT_WORKER_RDN_VERSIONED@.commitchanges">
+     <description>Install or remove packages</description>
++    <description xml:lang="zh_CN">安装或移除软件包需要授权</description>
+     <message>Install or remove packages</message>
++    <message xml:lang="zh_CN">安装或移除软件包需要授权</message>
+     <defaults>
+       <allow_inactive>no</allow_inactive>
+       <allow_active>auth_admin_keep</allow_active>
+-- 
+2.11.0
+

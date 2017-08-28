@@ -1,0 +1,48 @@
+# Dutch translation of netselect debconf templates.
+# Copyright (C) 2011 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the netselect package.
+# Kurt De Bree <kdebree@telenet.be>, 2006.
+# Jeroen Schot <schot@a-eskwadraat.nl>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: netselect 0.3.ds1-18\n"
+"Report-Msgid-Bugs-To: netselect@packages.debian.org\n"
+"POT-Creation-Date: 2009-02-26 07:37+0100\n"
+"PO-Revision-Date: 2011-11-21 14:24+0100\n"
+"Last-Translator: Jeroen Schot <schot@a-eskwadraat.nl>\n"
+"Language-Team: Debian l10n Dutch <debian-l10n-dutch@lists.debian.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid "Should netselect be installed setuid root?"
+msgstr "Wilt u netselect 'setuid-root' installeren?"
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid ""
+"Netselect can be installed with the set-user-id bit set, so that it will run "
+"with the permissions of the \"root\" user. Since netselect needs these "
+"permissions to work properly, unprivileged users cannot run it unless it is "
+"installed this way."
+msgstr ""
+"Netselect kan worden geïnstalleerd met de setuid-bit ingesteld, zodat het "
+"wordt uitgevoerd met beheerdersrechten. Aangezien netselect deze rechten "
+"nodig heeft om correct te kunnen werken, kunnen gewone gebruikers het alleen "
+"gebruiken als het op deze wijze is geïnstalleerd."
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid ""
+"Enabling this feature may be a security risk. If in doubt, it is suggested "
+"to leave it disabled."
+msgstr ""
+"Deze functionaliteit kan een veiligheidsrisico zijn. Bij twijfel wordt u "
+"aangeraden hem uitgeschakeld te laten."
