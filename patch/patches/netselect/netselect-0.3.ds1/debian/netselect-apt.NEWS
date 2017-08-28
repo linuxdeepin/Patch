@@ -1,8 +1,0 @@
-netselect-apt (0.3.ds1-13.1) unstable; urgency=low
-
-  This version of netselect-apt changes behaviour WRT handling of mirrors_full,
-  now it downloads the listing to a temporary file.
-  If you wish to keep the old behaviour use -i mirrors_full on the commandline
-  to download to current directory.
-
- -- Filippo Giunchedi <filippo@debian.org>  Sun, 31 May 2009 12:03:08 +0200
