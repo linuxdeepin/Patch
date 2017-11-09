@@ -48,5 +48,4 @@ gdebi //打了patch
 simplescreenrecorder //自己替换
 texstudio //自己替换了
 aria2 // patch项目
-zssh //deepin-terminal要过滤
 libinput // tap_gesture_1.8.0.patch
