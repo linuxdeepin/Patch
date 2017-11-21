@@ -1,0 +1,79 @@
+diff --git a/gtk/gtkplacessidebar.c b/gtk/gtkplacessidebar.c
+index b8d5985..c7ecbd1 100644
+--- a/gtk/gtkplacessidebar.c
++++ b/gtk/gtkplacessidebar.c
+@@ -600,6 +600,16 @@ add_special_dirs (GtkPlacesSidebar *sidebar)
+   gint index;
+ 
+   dirs = NULL;
++
++  GHashTable *table = NULL;
++  table = g_hash_table_new(g_str_hash, g_str_equal);
++
++  g_hash_table_insert(table, "Documents", _("Documents"));
++  g_hash_table_insert(table, "Downloads", _("Downloads"));
++  g_hash_table_insert(table, "Music", _("Music"));
++  g_hash_table_insert(table, "Pictures", _("Pictures"));
++  g_hash_table_insert(table, "Videos", _("Videos"));
++
+   for (index = 0; index < G_USER_N_DIRECTORIES; index++)
+     {
+       const gchar *path;
+@@ -629,6 +639,14 @@ add_special_dirs (GtkPlacesSidebar *sidebar)
+       if (!name)
+         name = g_file_get_basename (root);
+ 
++      if (name){
++        if (g_hash_table_contains(table, name)){
++          gchar* tmp = g_hash_table_lookup(table, name);
++          g_free(name);
++          name = g_strdup(tmp);
++        }
++      }
++
+       icon = special_directory_get_gicon (index);
+       mount_uri = g_file_get_uri (root);
+       tooltip = g_file_get_parse_name (root);
+@@ -646,7 +664,7 @@ add_special_dirs (GtkPlacesSidebar *sidebar)
+ 
+       dirs = g_list_prepend (dirs, (gchar *)path);
+     }
+-
++  g_hash_table_destroy(table);
+   g_list_free (dirs);
+ }
+ 
+diff --git a/po/zh_CN.po b/po/zh_CN.po
+index 35411d5..13abd8c 100644
+--- a/po/zh_CN.po
++++ b/po/zh_CN.po
+@@ -2494,7 +2494,28 @@ msgstr "未知"
+ 
+ #: gtk/gtkfilechooserwidget.c:5096 gtk/gtkplacessidebar.c:961
+ msgid "Home"
+-msgstr "Home"
++msgstr "主目录"
++
++#: gtk/gtkplacessidebar.c:607
++msgid "Documents"
++msgstr "文档"
++
++#: gtk/gtkplacessidebar.c:608
++msgid "Downloads"
++msgstr "下载"
++
++#: gtk/gtkplacessidebar.c:609
++msgid "Music"
++msgstr "音乐"
++
++#: gtk/gtkplacessidebar.c:610
++msgid "Pictures"
++msgstr "图片"
++
++#: gtk/gtkplacessidebar.c:611
++msgid "Videos"
++msgstr "视频"
++
+ 
+ #: gtk/gtkfilechooserwidget.c:5589
+ msgid "Cannot change to folder because it is not local"
