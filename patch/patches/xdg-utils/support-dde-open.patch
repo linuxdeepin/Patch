@@ -1,0 +1,61 @@
+Description: Collected Debian patches for xdg-utils
+Author: sbw <sbw@sbw.so>
+
+The xdg-utils package is maintained in Git rather than maintaining
+patches as separate files, and separating the patches doesn't seem to
+be worth the effort.  They are therefore all included in this single
+Debian patch.
+
+For full commit history and separated commits, see the packaging Git
+repository.
+--- xdg-utils-1.1.1.orig/scripts/xdg-open.in
++++ xdg-utils-1.1.1/scripts/xdg-open.in
+@@ -142,6 +142,21 @@ open_kde()
+     fi
+ }
+ 
++open_dde()
++{
++    if dde-open -version >/dev/null 2>&1; then
++        dde-open "$1"
++    else
++        open_generic "$1"
++    fi
++
++    if [ $? -eq 0 ]; then
++        exit_success
++    else
++        exit_failure_operation_failed
++    fi
++}
++
+ open_gnome3()
+ {
+     if gvfs-open --help >/dev/null 2>&1; then
+@@ -460,10 +475,14 @@ case "$DE" in
+     open_kde "$url"
+     ;;
+ 
+-    gnome3|cinnamon|dde)
++    gnome3|cinnamon)
+     open_gnome3 "$url"
+     ;;
+ 
++    dde)
++    open_dde "$url"
++    ;;
++
+     gnome)
+     open_gnome "$url"
+     ;;
+--- xdg-utils-1.1.1.orig/scripts/xdg-utils-common.in
++++ xdg-utils-1.1.1/scripts/xdg-utils-common.in
+@@ -268,7 +268,7 @@ detectDE()
+            DE=gnome;
+            ;;
+          # patch for deepin session support
+-         DEEPIN)
++         DEEPIN|Deepin)
+            DE=dde;
+            ;;
+          KDE)
