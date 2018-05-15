@@ -1,0 +1,8 @@
+rules:添加
+
+clean:: debian/control
+rm -f gtk/gtkresources.c gtk/gtkresources.h
+find . -name "*.gmo" -delete
+find . -name "stamp-po" -delete
+dh_clean
+

@@ -1,0 +1,12 @@
+--- a/confmodule
++++ b/confmodule
+@@ -14,6 +14,9 @@
+ 	if [ "$DEBCONF_USE_CDEBCONF" ]; then
+ 		exec /usr/lib/cdebconf/debconf $0 "$@"
+ 	else
++		if [ -n "$DEEPIN_LASTORE_LANG" ]; then
++			export LC_ALL="$DEEPIN_LASTORE_LANG"
++		fi
+ 		exec /usr/share/debconf/frontend $0 "$@"
+ 	fi
+ fi
