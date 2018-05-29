@@ -1,2 +1,21 @@
-data/cputable:
+scripts/t/Dpkg_Arch.t +19，把 16367 修改为 16830
+
+use Test::More tests => 16830;
+
+
+
+scripts/t/Dpkg_Arch.t +165，把524修改为539
+
+is(scalar get_valid_arches(), 539, 'expected amount of known architectures');
+
+
+
+data/cputable 最后添加一行
+
 sw_64           sw_64           sw_64.*                 64      little
+
+
+
+scripts/Dpkg/Arch.pm +596 添加一个_符号，修改为
+
+return $arch !~ m/^!?[a-zA-Z0-9][a-zA-Z0-9-_]*$/;
