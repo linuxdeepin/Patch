@@ -1,0 +1,10 @@
+--- fcitx-4.2.9.1.orig/CMakeLists.txt
++++ fcitx-4.2.9.1/CMakeLists.txt
+@@ -49,7 +49,7 @@ if(NOT NO_SNOOPER_APPS)
+ endif()
+ 
+ if(NOT NO_PREEDIT_APPS)
+-  set(NO_PREEDIT_APPS "gvim"
++  set(NO_PREEDIT_APPS ".*chrome.*,.*chromium.*,gvim"
+     CACHE STRING "Disable Preedit for the following apps")
+ endif()
