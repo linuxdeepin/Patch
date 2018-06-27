@@ -1,0 +1,48 @@
+--- a/po/zh_CN.po
++++ b/po/zh_CN.po
+@@ -77,11 +77,11 @@
+ msgstr "文本;编辑器;Text;Editor;"
+ 
+ #: ../data/org.gnome.gedit.desktop.in.in.h:6
+-msgid "Open a New Window"
++msgid "New Window"
+ msgstr "打开新窗口"
+ 
+ #: ../data/org.gnome.gedit.desktop.in.in.h:7
+-msgid "Open a New Document"
++msgid "New Document"
+ msgstr "打开新文档"
+ 
+ #: ../data/org.gnome.gedit.gschema.xml.in.h:1
+--- a/po/zh_HK.po
++++ b/po/zh_HK.po
+@@ -65,11 +65,11 @@
+ msgstr "Text;Editor;文字;編輯器;"
+ 
+ #: ../data/org.gnome.gedit.desktop.in.in.h:6
+-msgid "Open a New Window"
++msgid "New Window"
+ msgstr "開啟新的視窗"
+ 
+ #: ../data/org.gnome.gedit.desktop.in.in.h:7
+-msgid "Open a New Document"
++msgid "New Document"
+ msgstr "開啟新的文件"
+ 
+ #: ../data/org.gnome.gedit.gschema.xml.in.h:1
+--- a/po/zh_TW.po
++++ b/po/zh_TW.po
+@@ -65,11 +65,11 @@
+ msgstr "Text;Editor;文字;編輯器;"
+ 
+ #: ../data/org.gnome.gedit.desktop.in.in.h:5
+-msgid "Open a New Window"
++msgid "New Window"
+ msgstr "開啟新的視窗"
+ 
+ #: ../data/org.gnome.gedit.desktop.in.in.h:6
+-msgid "Open a New Document"
++msgid "New Document"
+ msgstr "開啟新的文件"
+ 
+ #: ../data/org.gnome.gedit.gschema.xml.in.h:1
