@@ -1,0 +1,51 @@
+From 84275464fc477e8eed63e83e8e55710a4564d8fc Mon Sep 17 00:00:00 2001
+From: Iceyer <me@iceyer.net>
+Date: Sun, 11 Feb 2018 14:25:12 +0800
+Subject: [PATCH] fix: reduce dbus message
+
+---
+ .../qfcitxplatforminputcontext.cpp                 | 23 +++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
+
+diff --git a/platforminputcontext/qfcitxplatforminputcontext.cpp b/platforminputcontext/qfcitxplatforminputcontext.cpp
+index cec628b..caf7e70 100644
+--- a/platforminputcontext/qfcitxplatforminputcontext.cpp
++++ b/platforminputcontext/qfcitxplatforminputcontext.cpp
+@@ -267,18 +267,27 @@ void QFcitxPlatformInputContext::commit() { QPlatformInputContext::commit(); }
+ 
+ void QFcitxPlatformInputContext::setFocusObject(QObject *object) {
+     Q_UNUSED(object);
+-    FcitxInputContextProxy *proxy = validICByWindow(m_lastWindow);
+-    commitPreedit(m_lastObject);
+-    if (proxy) {
+-        proxy->focusOut();
+-    }
+-
+     QWindow *window = qApp->focusWindow();
+-    m_lastWindow = window;
+     m_lastObject = object;
++
+     if (!window) {
++        m_lastWindow = window;
+         return;
+     }
++
++    commitPreedit(m_lastObject);
++
++    if (window == m_lastWindow) {
++        return;
++    }
++
++    m_lastWindow = window;
++
++    FcitxInputContextProxy *proxy = validICByWindow(m_lastWindow);
++    if (proxy) {
++        proxy->focusOut();
++    }
++
+     proxy = validICByWindow(window);
+     if (proxy)
+         proxy->focusIn();
+-- 
+2.13.3
+
