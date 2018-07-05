@@ -1,0 +1,62 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ flatpak (0.11.7-1deepin) unstable; urgency=medium
+ .
+   * add patch
+Author: Simon McVittie <zs@deepin.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: 2018-07-05
+
+--- flatpak-0.11.7.orig/common/flatpak-run.c
++++ flatpak-0.11.7/common/flatpak-run.c
+@@ -1172,6 +1172,14 @@ flatpak_run_apply_env_vars (FlatpakBwrap
+     }
+ }
+ 
++void
++flatpak_run_append_ref_env_vars (FlatpakBwrap *bwrap, const char *app_ref)
++{
++  if (app_ref)
++    flatpak_bwrap_set_env (bwrap, "FLATPAK_APPID", app_ref, TRUE);
++}
++
++
+ GFile *
+ flatpak_get_data_dir (const char *app_id)
+ {
+@@ -2946,6 +2954,7 @@ flatpak_run_app (const char     *app_ref
+ 
+   flatpak_run_apply_env_default (bwrap, use_ld_so_cache);
+   flatpak_run_apply_env_vars (bwrap, app_context);
++  flatpak_run_append_ref_env_vars (bwrap, app_ref);
+ 
+   if (real_app_id_dir)
+     {
+--- flatpak-0.11.7.orig/common/flatpak-run.h
++++ flatpak-0.11.7/common/flatpak-run.h
+@@ -145,6 +145,9 @@ void     flatpak_run_apply_env_appid (Fl
+                                       GFile *app_dir);
+ void      flatpak_run_apply_env_vars (FlatpakBwrap *bwrap,
+                                       FlatpakContext *context);
++void      flatpak_run_append_ref_env_vars(FlatpakBwrap *bwrap,
++		                      const char *app_ref);
++
+ FlatpakContext *flatpak_app_compute_permissions (GKeyFile *app_metadata,
+                                                  GKeyFile *runtime_metadata,
+                                                  GError  **error);

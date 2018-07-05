@@ -1,0 +1,40 @@
+From 6554bfe4ab192eec4f86c03019d075acb8665015 Mon Sep 17 00:00:00 2001
+From: leaeasy <leaeasy@gmail.com>
+Date: Tue, 20 Mar 2018 09:18:40 +0800
+Subject: [PATCH] feat: add gvfs args
+
+---
+ common/flatpak-run.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+Index: flatpak-0.11.3.p1/common/flatpak-run.c
+===================================================================
+--- flatpak-0.11.3.p1.orig/common/flatpak-run.c
++++ flatpak-0.11.3.p1/common/flatpak-run.c
+@@ -404,6 +404,17 @@ flatpak_run_parse_pulse_server (const ch
+ }
+ 
+ static void
++flatpak_run_add_gvfs_args (FlatpakBwrap *bwrap)
++{
++  g_autofree char *sandbox_gvfs_path = g_strdup_printf ("/run/user/%d/gvfs", getuid ());
++  if (g_file_test (sandbox_gvfs_path, G_FILE_TEST_EXISTS))
++    flatpak_bwrap_add_args (bwrap,
++					        "--bind", sandbox_gvfs_path, sandbox_gvfs_path, 
++							NULL);
++}
++
++
++static void
+ flatpak_run_add_pulseaudio_args (FlatpakBwrap *bwrap)
+ {
+   g_autofree char *pulseaudio_server = flatpak_run_get_pulseaudio_server ();
+@@ -832,6 +843,8 @@ flatpak_run_add_environment_args (Flatpa
+ 
+   flatpak_context_append_bwrap_filesystem (context, bwrap, app_id, app_id_dir, &exports);
+ 
++  flatpak_run_add_gvfs_args(bwrap);
++
+   if (context->sockets & FLATPAK_CONTEXT_SOCKET_WAYLAND)
+     {
+       g_debug ("Allowing wayland access");
