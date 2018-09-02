@@ -1,0 +1,93 @@
+Description: Speed up the startup process
+ Speed up the startup process by delaying some time-consuming imports and operations.
+
+Author: Hualet Wang <wangyaohua@deepin.com>
+
+---
+Last-Update: 2018-09-02
+
+--- system-config-printer-1.5.7.orig/system-config-printer.py
++++ system-config-printer-1.5.7/system-config-printer.py
+@@ -67,7 +67,6 @@ except locale.Error:
+ import gettext
+ gettext.install(domain=config.PACKAGE, localedir=config.localedir)
+ 
+-import cupshelpers
+ from gi.repository import GObject
+ from gi.repository import GLib
+ from gui import GtkGUI
+@@ -75,7 +74,6 @@ from debug import *
+ import urllib.request, urllib.parse, urllib.error
+ import troubleshoot
+ import installpackage
+-import jobviewer
+ import authconn
+ import monitor
+ import errordialogs
+@@ -85,9 +83,6 @@ from serversettings import ServerSetting
+ from ToolbarSearchEntry import *
+ from SearchCriterion import *
+ import statereason
+-import newprinter
+-from newprinter import busy, ready
+-import printerproperties
+ 
+ import ppdippstr
+ ppdippstr.init ()
+@@ -200,7 +195,14 @@ class GUI(GtkGUI):
+ 
+                         domain=config.PACKAGE)
+ 
++        GObject.timeout_add(700, self.lazy_init_widgets)
+ 
++        self.PrintersWindow.show()
++
++    def lazy_init_widgets(self):
++        import newprinter
++        import printerproperties
++        
+         # Since some dialogs are reused we can't let the delete-event's
+         # default handler destroy them
+         self.ConnectingDialog.connect ("delete-event",
+@@ -786,6 +788,8 @@ class GUI(GtkGUI):
+         return known_servers
+ 
+     def populateList(self, prompt_allowed=True):
++        import cupshelpers
++
+         # Save selection of printers.
+         selected_printers = set()
+         paths = self.dests_iconview.get_selected_items ()
+@@ -1804,6 +1808,7 @@ class GUI(GtkGUI):
+             iter = next
+ 
+     def on_view_print_queue_activate (self, *UNUSED):
++        import jobviewer
+         paths = self.dests_iconview.get_selected_items ()
+         if len (paths):
+             specific_dests = []
+@@ -2029,6 +2034,8 @@ class GUI(GtkGUI):
+ 
+         ppd: cups.PPD object, if already created"""
+ 
++        import cupshelpers
++
+         # Is this queue on the local machine?  If not, we can't check
+         # anything at all.
+         server = cups.getServer ()
+@@ -2171,6 +2178,7 @@ def main(show_jobs):
+     DBusGMainLoop (set_as_default=True)
+ 
+     if show_jobs:
++        import jobviewer
+         viewer = jobviewer.JobViewer (None, None, my_jobs=False,
+                                       specific_dests=[show_jobs])
+         viewer.connect ('finished', Gtk.main_quit)
+@@ -2197,6 +2205,7 @@ if __name__ == "__main__":
+     for opt, optarg in opts:
+         if opt == '--debug':
+             set_debugging (True)
++            import cupshelpers
+             cupshelpers.set_debugprint_fn (debugprint)
+         elif opt == '--show-jobs':
+             show_jobs = optarg
