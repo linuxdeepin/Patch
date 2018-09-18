@@ -38,7 +38,7 @@ Last-Update: 2018-09-02
  
                          domain=config.PACKAGE)
  
-+        GObject.timeout_add(700, self.lazy_init_widgets)
++        GObject.timeout_add(1000, self.lazy_init_widgets)
  
 +        self.PrintersWindow.show()
 +
