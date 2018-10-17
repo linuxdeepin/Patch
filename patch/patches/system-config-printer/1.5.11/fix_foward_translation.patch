@@ -1,0 +1,49 @@
+Description: fix Chinese translation of "Forward"
+
+---
+Last-Update: 2018-10-12
+
+--- system-config-printer-1.5.11.orig/po/zh_CN.po
++++ system-config-printer-1.5.11/po/zh_CN.po
+@@ -20,19 +20,19 @@
+ # Zdenek Dohnal <zdohnal@redhat.com>, 2016. #zanata
+ msgid ""
+ msgstr ""
+-"Project-Id-Version: PACKAGE VERSION\n"
++"Project-Id-Version: \n"
+ "Report-Msgid-Bugs-To: https://bugzilla.redhat.com/bugzilla\n"
+ "POT-Creation-Date: 2018-01-23 10:27+0100\n"
+-"PO-Revision-Date: 2016-10-24 07:02-0400\n"
++"PO-Revision-Date: 2018-10-12 13:22+0800\n"
+ "Last-Translator: Zdenek Dohnal <zdohnal@redhat.com>\n"
+ "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/system-"
+ "config-printer/language/zh_CN/)\n"
+-"Language: zh-CN\n"
++"Language: zh_CN\n"
+ "MIME-Version: 1.0\n"
+ "Content-Type: text/plain; charset=UTF-8\n"
+ "Content-Transfer-Encoding: 8bit\n"
+ "Plural-Forms: nplurals=1; plural=0;\n"
+-"X-Generator: Zanata 3.9.6\n"
++"X-Generator: Poedit 2.0.7\n"
+ 
+ #: ../asyncipp.py:473 ../authconn.py:456 ../authconn.py:458
+ #: ../errordialogs.py:63 ../pysmb.py:90 ../pysmb.py:92
+@@ -2877,7 +2877,7 @@ msgstr "应用(_A)"
+ 
+ #: ../ui/NewPrinterWindow.ui.h:106
+ msgid "_Forward"
+-msgstr "转发（_F）"
++msgstr "继续（_F）"
+ 
+ #: ../ui/PrinterPropertiesDialog.ui.h:1
+ msgid "Printer Properties"
+@@ -3864,7 +3864,7 @@ msgstr ""
+ 
+ #: ../troubleshoot/Welcome.py:51
+ msgid "Click 'Forward' to begin."
+-msgstr "点击‘前进’开始。"
++msgstr "点击‘继续’开始。"
+ 
+ #: ../applet.py:84
+ msgid "Configuring new printer"
