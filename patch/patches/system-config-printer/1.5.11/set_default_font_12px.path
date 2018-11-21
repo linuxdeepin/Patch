@@ -1,0 +1,37 @@
+Description: set default font to 12px
+ If the font size is bigger than 12 or 13px, the NewPrinterWindow will be bigger 
+ than the 1366x768 screen and be cut.
+ .
+ system-config-printer (1.5.11-2deepin) unstable; urgency=medium
+ .
+   * add patch fix translation
+Author: Packages <zs@deepin.com>
+
+---
+Last-Update: 2018-11-21
+
+--- system-config-printer-1.5.11.orig/gui.py
++++ system-config-printer-1.5.11/gui.py
+@@ -22,12 +22,21 @@
+ ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ 
+ from gi.repository import GObject
+-from gi.repository import Gtk
++from gi.repository import Gtk, Gdk
+ import os
+ 
+ import config
+ pkgdata = config.pkgdatadir
+ 
++# Hack: set fixed font size so that the new printer window won't cut.
++import sys
++style = "*{font-size: 12px;}"
++css = Gtk.CssProvider.new()
++css.load_from_data(style.encode(sys.getdefaultencoding()))
++screen = Gdk.Screen.get_default()
++Gtk.StyleContext.add_provider_for_screen(screen, css, 800)
++# end hack.
++
+ class GtkGUI(GObject.GObject):
+     def getWidgets(self, widgets, domain=None):
+         ui_dir = os.environ.get ("SYSTEM_CONFIG_PRINTER_UI",
