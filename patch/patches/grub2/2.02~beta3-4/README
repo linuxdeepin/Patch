@@ -1,0 +1,5 @@
+# deepin_gfxmode 模块的补充安装
+
+在 grub-pc-bin 的 postinst 脚本中，判断是否存在 /boot/grub/i386-pc 目录，如果存在，则复制 /usr/lib/grub/i386-pc/deepin_gfxmode.mod 到 /boot/grub/i386-pc 目录。
+
+在 grub-efi-amd64-bin 的 postinst 脚本中，判断是否存在 /boot/grub/x86_64-efi 目录，如果存在，则复制 /usr/lib/grub/x86_64-efi/deepin_gfxmode.mod 到 /boot/grub/x86_64-efi 目录。
