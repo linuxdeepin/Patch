@@ -1,0 +1,22 @@
+Description: Notify user to logout after changing system font
+
+Author: Hualet Wang <wangyaohua@deepin.com>
+
+Last-Update: 2018-11-30
+
+--- mate-control-center-1.16.1.orig/capplets/appearance/appearance-themes.c
++++ mate-control-center-1.16.1/capplets/appearance/appearance-themes.c
+@@ -987,6 +987,13 @@ theme_drag_data_received_cb (GtkWidget *
+ 
+ static void background_or_font_changed(GSettings *settings, gchar *key, AppearanceData* data)
+ {
++  GtkWidget* dialog = gtk_message_dialog_new(
++        GTK_WINDOW (appearance_capplet_get_widget (data, "appearance_window")), 
++        GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
++        "系统字体已修改，请注销并重新登录系统");
++  gtk_dialog_run(GTK_DIALOG(dialog));
++  gtk_widget_destroy(dialog);
++
+ 	theme_message_area_update(data);
+ }
+ 
