@@ -23,9 +23,19 @@ Forwarded: <no|not-needed|url proving that it has been forwarded>
 Reviewed-By: <name and email of someone who approved the patch>
 Last-Update: 2018-07-02
 
---- libqapt-3.0.4.orig/src/debfile.cpp
-+++ libqapt-3.0.4/src/debfile.cpp
-@@ -151,39 +151,26 @@ QString DebFile::homepage() const
+Index: libqapt-3.0.2/src/debfile.cpp
+===================================================================
+--- libqapt-3.0.2.orig/src/debfile.cpp
++++ libqapt-3.0.2/src/debfile.cpp
+@@ -30,6 +30,7 @@
+ #include <apt-pkg/md5.h>
+ #include <apt-pkg/tagfile.h>
+
++#include <QRegularExpression>
+ #include <QDebug>
+
+ namespace QApt {
+@@ -143,39 +144,26 @@ QString DebFile::homepage() const
  
  QString DebFile::longDescription() const
  {
