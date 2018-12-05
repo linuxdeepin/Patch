@@ -5,10 +5,10 @@ Description: <short summary of the patch>
  information below has been extracted from the changelog. Adjust it or drop
  it.
  .
- libqapt (3.0.4-1deepin) unstable; urgency=medium
+ libqapt (3.0.2-1deepin) unstable; urgency=medium
  .
-   * add patch
-Author: Pino Toscano <zs@deepin.com>
+   * add deepin patch
+Author: Packages <zs@deepin.com>
 
 ---
 The information above should follow the Patch Tagging Guidelines, please
@@ -21,21 +21,20 @@ Bug-Debian: https://bugs.debian.org/<bugnumber>
 Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
 Forwarded: <no|not-needed|url proving that it has been forwarded>
 Reviewed-By: <name and email of someone who approved the patch>
-Last-Update: 2018-07-02
+Last-Update: 2018-12-05
 
-Index: libqapt-3.0.2/src/debfile.cpp
-===================================================================
 --- libqapt-3.0.2.orig/src/debfile.cpp
 +++ libqapt-3.0.2/src/debfile.cpp
-@@ -30,6 +30,7 @@
- #include <apt-pkg/md5.h>
- #include <apt-pkg/tagfile.h>
-
+@@ -19,7 +19,7 @@
+  ***************************************************************************/
+ 
+ #include "debfile.h"
+-
 +#include <QRegularExpression>
- #include <QDebug>
-
- namespace QApt {
-@@ -143,39 +144,26 @@ QString DebFile::homepage() const
+ #include <QtCore/QDir>
+ #include <QtCore/QProcess>
+ #include <QtCore/QStringBuilder>
+@@ -151,39 +151,26 @@ QString DebFile::homepage() const
  
  QString DebFile::longDescription() const
  {
