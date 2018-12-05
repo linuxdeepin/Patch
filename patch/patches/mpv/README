@@ -1,1 +1,2 @@
 add build-depend libuchardet-dev
+libmpv1 remove depend youtubo-dl
