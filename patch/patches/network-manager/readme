@@ -9,3 +9,5 @@ managed=true
 [device]
 wifi.scan-rand-mac-address=no
 
+[connectivity]
+uri=http://www.archlinux.org/check_network_status.txt
