@@ -1,0 +1,71 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ udisks2 (2.1.8-1) unstable; urgency=medium
+ .
+   * New upstream version:
+     - Fixes race condition with creating and formatting partitions.
+       (Closes: #767457, LP: #1460602)
+   * debian/tests/upstream-system: Drop unnecessary dbus-run-session.
+   * debian/tests/upstream-system: Collect core dump when the test crashes.
+     This ought to help with tracking down https://launchpad.net/bugs/1585382.
+   * Suggest btrfs-progs as preferred alternative to btrfs-tools
+     (Closes: #842436)
+Author: Martin Pitt <mpitt@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: 2018-12-20
+
+--- udisks2-2.1.8.orig/src/udiskslinuxfilesystem.c
++++ udisks2-2.1.8/src/udiskslinuxfilesystem.c
+@@ -719,8 +719,11 @@ calculate_mount_options (UDisksDaemon
+                          GError                   **error)
+ {
+   const FSMountOptions *fsmo;
++  UDisksLinuxBlockObject *object = NULL;
++  UDisksLinuxDevice *device = NULL;
+   gchar **options_to_use;
+   gchar *options_to_use_str;
++  gchar *extra_opts_str = NULL;
+   GString *str;
+   guint n;
+ 
+@@ -736,6 +739,24 @@ calculate_mount_options (UDisksDaemon
+ 
+   /* validate mount options */
+   str = g_string_new ("uhelper=udisks2,nodev,nosuid");
++
++  object = udisks_daemon_util_dup_object (block, NULL);
++  device = udisks_linux_block_object_get_device (object);
++
++  if (device != NULL && device->udev_device != NULL) 
++    {
++      extra_opts_str = g_udev_device_get_property (device->udev_device, "UDISKS_MOUNT_OPTIONS");
++
++      if (extra_opts_str)
++        {
++          g_string_append_c (str, ',');
++          g_string_append (str, extra_opts_str);
++        }
++    }
++
++  g_clear_object (&device);
++  g_clear_object (&object);
++
+   for (n = 0; options_to_use[n] != NULL; n++)
+     {
+       const gchar *option = options_to_use[n];

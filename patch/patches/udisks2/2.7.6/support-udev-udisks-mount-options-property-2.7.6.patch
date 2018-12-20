@@ -1,0 +1,45 @@
+Description: support udev UDISKS_MOUNT_OPTIONS property
+                       
+Author: zccrs <zhangjide@deepin.com>                         
+                                                  
+Last-Update: 2018-12-13                      
+
+--- udisks2-2.7.6.orig/src/udiskslinuxfilesystem.c
++++ udisks2-2.7.6/src/udiskslinuxfilesystem.c
+@@ -765,6 +765,7 @@ calculate_mount_options (UDisksDaemon  *
+   UDisksLinuxDevice *device = NULL;
+   gboolean shared_fs = FALSE;
+   gchar *options_to_use_str;
++  gchar *extra_opts_str = NULL;
+   gchar *key, *value;
+   GString *str;
+ 
+@@ -774,10 +775,13 @@ calculate_mount_options (UDisksDaemon  *
+ 
+   object = udisks_daemon_util_dup_object (block, NULL);
+   device = udisks_linux_block_object_get_device (object);
+-  if (device != NULL && device->udev_device != NULL &&
+-      g_udev_device_get_property_as_boolean (device->udev_device, "UDISKS_FILESYSTEM_SHARED"))
+-    shared_fs = TRUE;
++  if (device != NULL && device->udev_device != NULL)
++    {
++      if (g_udev_device_get_property_as_boolean (device->udev_device, "UDISKS_FILESYSTEM_SHARED"))
++        shared_fs = TRUE;
+ 
++      extra_opts_str = g_udev_device_get_property (device->udev_device, "UDISKS_MOUNT_OPTIONS");
++    }
+   g_clear_object (&device);
+   g_clear_object (&object);
+ 
+@@ -788,6 +792,11 @@ calculate_mount_options (UDisksDaemon  *
+ 
+   /* validate mount options */
+   str = g_string_new ("uhelper=udisks2,nodev,nosuid");
++  if (extra_opts_str)
++    {
++      g_string_append_c (str, ',');
++      g_string_append (str, extra_opts_str);
++    }
+   g_hash_table_iter_init (&iter, options_to_use);
+   while (g_hash_table_iter_next (&iter, (gpointer*) &key, (gpointer*) &value))
+     {
