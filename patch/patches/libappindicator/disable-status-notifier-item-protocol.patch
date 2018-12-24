@@ -1,0 +1,27 @@
+Description: disable SNI in libappindicator
+ There is a problem with the SNI supported by libappindicator.
+ The left-click interface is not implemented. The XEmbed protocol will be used after SNI is disabled.
+
+Author: listenerri <listenerri@gmail.com>
+
+Bug: https://github.com/linuxdeepin/developer-center/issues/670
+Forwarded: not-needed
+Last-Update: 2018-12-24
+
+--- libappindicator-0.4.92.orig/src/app-indicator.c
++++ libappindicator-0.4.92/src/app-indicator.c
+@@ -1280,6 +1280,14 @@ check_connect (AppIndicator *self)
+ static void
+ bus_watcher_ready (GObject * obj, GAsyncResult * res, gpointer user_data)
+ {
++    // disable SNI here
++    if (IS_APP_INDICATOR(user_data)) {
++        start_fallback_timer(APP_INDICATOR(user_data), FALSE);
++    }
++
++    g_object_unref(G_OBJECT(user_data));
++    return;
++
+ 	GError * error = NULL;
+ 
+ 	GDBusProxy * proxy = NULL;
