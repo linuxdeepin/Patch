@@ -1,0 +1,15 @@
+Description: Disable dpms-standby module by default
+Author: Hualet Wang<wangyaohua@deepin.com>
+Last-Update: 2019-01-02
+
+--- laptop-mode-tools-1.72.2+r28~g8500118.orig/etc/laptop-mode/conf.d/dpms-standby.conf
++++ laptop-mode-tools-1.72.2+r28~g8500118/etc/laptop-mode/conf.d/dpms-standby.conf
+@@ -35,7 +35,7 @@ DEBUG=0
+ # Should laptop mode tools control DPMS standby settings for X displays?
+ #
+ # Set to 0 to disable
+-CONTROL_DPMS_STANDBY="auto"
++CONTROL_DPMS_STANDBY=0
+ 
+ 
+ #
