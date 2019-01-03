@@ -1,0 +1,21 @@
+Description: Disable keyboard grabs
+ I assume the keyboard grabbing is trying to get keyboard focus so that
+ user won't bother to click the dialog and type in the credentials, but
+ it seems to be pointless since new windows are always getting focus in
+ the first place.
+Author: Hualet Wang <wangyaohua@deepin.com>
+
+---
+Last-Update: 2019-01-03
+
+--- gcr-3.28.0.orig/ui/gcr-prompt-dialog.c
++++ gcr-3.28.0/ui/gcr-prompt-dialog.c
+@@ -59,6 +59,8 @@
+ #define GRAB_KEYBOARD 1
+ #endif
+ 
++#define GRAB_KEYBOARD 0
++
+ typedef enum {
+ 	PROMPT_NONE,
+ 	PROMPT_CONFIRMING,
