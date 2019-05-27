@@ -16,7 +16,7 @@ Last-Update: 2018-08-17
 +panel_action_suspend (GtkWidget *widget)
 +{
 +	system("mate-screensaver-command -l");
-+	system("systemctl suspend");
++	// system("systemctl suspend");
 +}
 +
 +static gboolean
