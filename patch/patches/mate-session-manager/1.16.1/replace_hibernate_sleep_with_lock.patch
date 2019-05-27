@@ -1,0 +1,20 @@
+Description: replace sleep & hibernate function with lock screen.
+
+---
+Last-Update: 2019-05-27
+
+--- mate-session-manager-1.16.1.orig/mate-session/gsm-manager.c
++++ mate-session-manager-1.16.1/mate-session/gsm-manager.c
+@@ -3182,10 +3182,10 @@ logout_dialog_response (GsmLogoutDialog
+                 request_switch_user (manager);
+                 break;
+         case GSM_LOGOUT_RESPONSE_HIBERNATE:
+-                request_hibernate (manager);
++                system("mate-screensaver-command -l");
+                 break;
+         case GSM_LOGOUT_RESPONSE_SLEEP:
+-                request_suspend (manager);
++                system("mate-screensaver-command -l");
+                 break;
+         case GSM_LOGOUT_RESPONSE_SHUTDOWN:
+                 request_shutdown (manager);
