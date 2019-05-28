@@ -1,0 +1,19 @@
+Description: hide suspend&hibernate buttons
+Author: Hualet Wang <wangyaohua@deepin.com>
+
+---
+Last-Update: 2019-05-28
+
+--- lightdm-gtk-greeter-2.0.2.orig/src/lightdm-gtk-greeter.c
++++ lightdm-gtk-greeter-2.0.2/src/lightdm-gtk-greeter.c
+@@ -2999,6 +2999,10 @@ main (int argc, char **argv)
+         restart_menuitem = (GTK_WIDGET (gtk_builder_get_object (builder, "restart_menuitem")));
+         shutdown_menuitem = (GTK_WIDGET (gtk_builder_get_object (builder, "shutdown_menuitem")));
+ 
++        gboolean is_arm = system("arch|grep aarch64") == 0;
++        gtk_widget_set_visible(suspend_menuitem, !is_arm);
++        gtk_widget_set_visible(hibernate_menuitem, !is_arm);
++
+         g_signal_connect (G_OBJECT (power_menuitem),"activate", G_CALLBACK (power_menu_cb), NULL);
+     }
+ 
