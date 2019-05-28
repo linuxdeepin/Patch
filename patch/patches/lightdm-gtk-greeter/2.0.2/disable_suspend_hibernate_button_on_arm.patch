@@ -1,0 +1,21 @@
+Description: Disable suspend & hibernate buttons on arm
+
+Author: Hualet Wang <wangyaohua@deepin.com>
+
+---
+Last-Update: 2019-05-28
+
+--- lightdm-gtk-greeter-2.0.2.orig/src/lightdm-gtk-greeter.c
++++ lightdm-gtk-greeter-2.0.2/src/lightdm-gtk-greeter.c
+@@ -1825,8 +1825,9 @@ a11y_reader_cb (GtkCheckMenuItem *item,
+ static void
+ power_menu_cb (GtkWidget *menuitem, gpointer userdata)
+ {
+-    gtk_widget_set_sensitive (suspend_menuitem, lightdm_get_can_suspend ());
+-    gtk_widget_set_sensitive (hibernate_menuitem, lightdm_get_can_hibernate ());
++    gboolean is_arm = system("arch | grep aarch64") == 0;
++    gtk_widget_set_sensitive (suspend_menuitem, lightdm_get_can_suspend () && !is_arm);
++    gtk_widget_set_sensitive (hibernate_menuitem, lightdm_get_can_hibernate () && !is_arm);
+     gtk_widget_set_sensitive (restart_menuitem, lightdm_get_can_restart ());
+     gtk_widget_set_sensitive (shutdown_menuitem, lightdm_get_can_shutdown ());
+ }
