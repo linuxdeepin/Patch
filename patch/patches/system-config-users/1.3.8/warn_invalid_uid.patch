@@ -1,0 +1,22 @@
+Description: warn invalid UID
+Author: Wang Yaohua <wangyaohua@deepin.com>
+
+---
+Last-Update: 2019-05-29
+
+--- system-config-users-1.3.8.orig/src/userWindow.py
++++ system-config-users-1.3.8/src/userWindow.py
+@@ -283,6 +283,10 @@ class userWindow(object):
+         else:
+             gidNumber = None
+ 
++        isUidValid = uidNumber != 65535
++        if not isUidValid:
++            messageDialog.show_error_dialog("这个UID无效")
++            self.ready()
++            self.newUidSpinButton.grab_focus()
++            return 
++
+         gidDuplicate = False
+ 
+         try:
