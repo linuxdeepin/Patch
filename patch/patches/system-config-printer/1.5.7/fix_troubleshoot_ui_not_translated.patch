@@ -1,0 +1,31 @@
+Description: fix troubleshoot UI not translated
+
+Author: Wang Yaohua <wangyaohua@deepin.com>
+
+---
+Last-Update: 2019-06-03
+
+--- system-config-printer-1.5.7.orig/troubleshoot/base.py
++++ system-config-printer-1.5.7/troubleshoot/base.py
+@@ -21,16 +21,18 @@
+ ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ 
+ from gi.repository import Gtk
+-from gettext import gettext as _
+ N_ = lambda x: x
+ from debug import *
+ 
+-__all__ = [ '_',
+-            'debugprint', 'get_debugging', 'set_debugging',
++__all__ = [ 'debugprint', 'get_debugging', 'set_debugging',
+             'Question',
+             'Multichoice',
+             'TEXT_start_print_admin_tool' ]
+ 
++import config
++import gettext
++gettext.install(domain=config.PACKAGE, localedir=config.localedir)
++
+ TEXT_start_print_admin_tool = N_("To start this tool, select "
+                                  "System->Administration->Print Settings "
+                                  "from the main menu.")
