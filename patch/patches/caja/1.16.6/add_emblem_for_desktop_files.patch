@@ -1,0 +1,41 @@
+Description: add emblem for desktop files
+
+Author: Yaohua Wang <wangyaohua@deepin.com>
+
+---
+Last-Update: 2019-06-04
+
+--- caja-1.16.6.orig/src/file-manager/fm-icon-view.c
++++ caja-1.16.6/src/file-manager/fm-icon-view.c
+@@ -619,6 +619,31 @@ fm_icon_view_add_file (FMDirectoryView *
+     if (caja_icon_container_add (icon_container,
+                                  CAJA_ICON_CONTAINER_ICON_DATA (file)))
+     {
++        GList *keywords, *word = NULL;
++        char *mimetype, *filename = NULL;
++        char *name = "emblem-symbolic-link";
++        gboolean is_desktop_file = FALSE;
++
++        filename = caja_file_get_name(file);
++        mimetype = caja_file_get_mime_type(file);        
++        is_desktop_file = (mimetype && g_strcmp0(mimetype, "application/x-desktop") == 0) \
++                          || (filename && g_str_has_suffix(filename, ".desktop"));
++
++        if (filename)
++            g_free(filename);
++        if (mimetype)
++            g_free(mimetype);
++
++        if (is_desktop_file) {
++            keywords = caja_file_get_keywords (file);
++            word = g_list_find_custom (keywords, name,  (GCompareFunc)strcmp);
++            if (!word) {
++                keywords = g_list_prepend (keywords, g_strdup (name));
++            }
++            caja_file_set_keywords (file, keywords);
++            g_list_free_full (keywords, g_free);
++        }
++
+         caja_file_ref (file);
+     }
+ }
